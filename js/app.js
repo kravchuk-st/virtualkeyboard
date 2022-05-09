@@ -81,19 +81,30 @@ class Keyboard {
         this.lisenScreen();
         this.saveSetingds();
     }
-    
+
+    clearKeyboard() {
+      document.getElementById('keyboard').innerHTML = '';
+    }
 
     saveSetingds() {
       if(window.localStorage) {
-        document.onkeydown = function(ev) {
-          if(ev.keyCode === 17) {
-            document.onkeyup = function(ev) {
-              if (ev.keyCode === 16) {
+        document.onkeydown = (ev) => {
+          if(ev.keyCode === 16) {
+            document.onkeyup = (event) => {
+              if (event.keyCode === 17) {
+
                 if (localStorage.getItem("lang") === 'en') {
-                  localStorage.setItem("lang", "ru");
+                  this.lang = this.langOptions.ru;
                 } else {
-                  localStorage.setItem("lang", "en");
+                  this.lang = this.langOptions.en;
                 }
+
+                localStorage.setItem("lang", this.lang);
+
+                this.clearKeyboard();
+                this.createVirtualKeyboard();
+                this.lisenScreen();
+                this.functionalKeys();
               }
             }
           }
@@ -172,7 +183,7 @@ class Keyboard {
           }
 
           
-          });
+        });
     }
 
 
@@ -200,14 +211,13 @@ class Keyboard {
 
 
     createVirtualKeyboard() {
-        // add html and events
         let out = '';
         switch (this.lang) {
             case this.langOptions.en:
               this.keyCodes.forEach(el => {
                 out += `<div class="key" data-keyCode="${el.keyCode}">${el.en}</div>`;
 
-
+               
                 // keyElement.addEventListener("click", () => {
                 //     this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                 //     this._triggerEvent("oninput");
@@ -221,7 +231,7 @@ class Keyboard {
                 this.keyCodes.forEach(el => {
                     out += `<div class="key" data-keyCode="${el.keyCode}">${el.ru}</div>`;
 
-
+            
                     // keyElement.addEventListener("click", () => {
                     //     this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                     //     this._triggerEvent("oninput");
@@ -247,7 +257,6 @@ class Keyboard {
         const enter = document.querySelector("div[data-keycode='13']");
         enter.classList.add('Enter');
         enter.innerText = 'Enter';
-        // enter.key = '\n';
 
         const shiftLeft = document.querySelectorAll("div[data-keycode='16']")[0];
         shiftLeft.classList.add('ShiftLeft');
@@ -301,71 +310,69 @@ class Keyboard {
         del.innerText = 'del';
     }
 
+  functionalKeys () {
+    let capsLockKey = document.querySelector('.CapsLock');
+    capsLockKey.addEventListener('click', (ev) => {
+      capsLockKey.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (ev) => {
+      if (ev.target.classList.contains('ControlLeft')) {
+        ev.target.classList.add('active');
+        setTimeout(function(){
+          ev.target.classList.remove('active');
+        }, 300)
+      }
+
+      if (ev.target.classList.contains('ControlRight')) {
+        ev.target.classList.add('active');
+        setTimeout(function(){
+          ev.target.classList.remove('active');
+        }, 300)
+      }
+
+      if (ev.target.classList.contains('AltLeft')) {
+        ev.target.classList.add('active');
+        setTimeout(function(){
+          ev.target.classList.remove('active');
+        }, 300)
+      }
+
+      if (ev.target.classList.contains('AltRight')) {
+        ev.target.classList.add('active');
+        setTimeout(function(){
+          ev.target.classList.remove('active');
+        }, 300)
+      }
+    });
+
+    window.addEventListener('keydown', (ev) => {
+      if (ev.keyCode === 20) {
+        ev.preventDefault();
+        capsLockKey.classList.toggle('active');
+      }
+
+      if (ev.keyCode === 17) {
+        document.querySelector(`.${ev.code}`).classList.add('active');
+        setTimeout(function(){
+          document.querySelector(`.${ev.code}`).classList.remove('active');
+        }, 300)
+      }
+
+      if (ev.keyCode === 18) {
+        document.querySelector(`.${ev.code}`).classList.add('active');
+        setTimeout(function(){
+          document.querySelector(`.${ev.code}`).classList.remove('active');
+        }, 300)
+      }
+    })
+  }
+
 }
 
 
 window.addEventListener("DOMContentLoaded", function () {
   const keybord = new Keyboard();
-
-  let isShift = false;
-  let isCLock = false;
-
-  let capsLockKey = document.querySelector('.CapsLock');
-  capsLockKey.addEventListener('click', (ev) => {
-    capsLockKey.classList.toggle('active');
-  });
-
-  document.addEventListener('click', (ev) => {
-    if (ev.target.classList.contains('ControlLeft')) {
-      ev.target.classList.add('active');
-      setTimeout(function(){
-        ev.target.classList.remove('active');
-      }, 300)
-    }
-
-    if (ev.target.classList.contains('ControlRight')) {
-      ev.target.classList.add('active');
-      setTimeout(function(){
-        ev.target.classList.remove('active');
-      }, 300)
-    }
-
-    if (ev.target.classList.contains('AltLeft')) {
-      ev.target.classList.add('active');
-      setTimeout(function(){
-        ev.target.classList.remove('active');
-      }, 300)
-    }
-
-    if (ev.target.classList.contains('AltRight')) {
-      ev.target.classList.add('active');
-      setTimeout(function(){
-        ev.target.classList.remove('active');
-      }, 300)
-    }
-  });
-
-  window.addEventListener('keydown', (ev) => {
-    if (ev.keyCode === 20) {
-      ev.preventDefault();
-      capsLockKey.classList.toggle('active');
-    }
-
-    if (ev.keyCode === 17) {
-      document.querySelector(`.${ev.code}`).classList.add('active');
-      setTimeout(function(){
-        document.querySelector(`.${ev.code}`).classList.remove('active');
-      }, 300)
-    }
-
-    if (ev.keyCode === 18) {
-      document.querySelector(`.${ev.code}`).classList.add('active');
-      setTimeout(function(){
-        document.querySelector(`.${ev.code}`).classList.remove('active');
-      }, 300)
-    }
-  })
-
 });
 
 // document.onkeydown = function(ev) {

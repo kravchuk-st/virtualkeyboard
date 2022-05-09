@@ -121,8 +121,8 @@ export const keys = [
       "en": "-",
       "ru": "-",
       "shift": "_",
-      "keyCode": 189,
-      "which": 189,
+      "keyCode": 173,
+      "which": 173,
       "code": "NumpadSubtract",
       "location": 3,
       "description": "subtract"
@@ -131,8 +131,8 @@ export const keys = [
       "en": "=",
       "ru": "=",
       "shift": "+",
-      "keyCode": 187,
-      "which": 187,
+      "keyCode": 61,
+      "which": 61,
       "code": "Equal",
       
       "description": "equals (firefox)"
@@ -398,8 +398,8 @@ export const keys = [
       "en": ";",
       "ru": "ж",
       "shift": ":",
-      "keyCode": 186,
-      "which": 186,
+      "keyCode": 59,
+      "which": 59,
       "code": "Semicolon",
       
       "description": "semicolon (firefox), equals"
