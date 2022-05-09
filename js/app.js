@@ -180,6 +180,10 @@ class Keyboard {
           ev.target.classList.remove('active');
         }, 300)
       }
+      
+      if (ev.target.classList.contains('Backspace') || ev.target.classList.contains('Del')) {
+        document.querySelector('#textarea').value = '';
+      }
     });
 
     document.addEventListener('mousedown', (ev) => {
@@ -229,6 +233,10 @@ class Keyboard {
       if (ev.keyCode === 16) {
         this.isShiftACtive = true;
         document.querySelector(`.${ev.code}`).classList.add('active');
+      }
+
+      if (ev.keyCode === 8 || ev.keyCode === 46) {
+        document.querySelector('#textarea').value = '';
       }
     });
 
