@@ -180,8 +180,12 @@ class Keyboard {
           ev.target.classList.remove('active');
         }, 300)
       }
+
+      if (ev.target.classList.contains('Backspace')) {
+        document.querySelector('#textarea').value = document.querySelector('#textarea').value.slice(0, -1);
+      }
       
-      if (ev.target.classList.contains('Backspace') || ev.target.classList.contains('Del')) {
+      if (ev.target.classList.contains('Del')) {
         document.querySelector('#textarea').value = '';
       }
     });
@@ -235,7 +239,11 @@ class Keyboard {
         document.querySelector(`.${ev.code}`).classList.add('active');
       }
 
-      if (ev.keyCode === 8 || ev.keyCode === 46) {
+      if (ev.keyCode === 8) {
+        document.querySelector('#textarea').value = document.querySelector('#textarea').value.slice(0, -1);
+      }
+
+      if (ev.keyCode === 46) {
         document.querySelector('#textarea').value = '';
       }
     });
