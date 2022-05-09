@@ -1,0 +1,98 @@
+@font-face {
+  font-family: "Trebuchet MS"; 
+  src: url("../fonts/trebuchetms.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+  } 
+
+body{
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 16px;
+  line-height: 1.3;
+  text-align: center
+}
+
+.container{
+  margin: 10px auto;
+  padding: 0;
+  width: 100%;
+  max-width: 704px;
+}
+
+h1{
+  font-size: 30px;
+  color: rgba(114,177,101,0.8);
+}
+
+.body-textarea{
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #e7e7e7;
+  transition: 0.2s;
+}
+
+.keyboard {
+  width: 100%;
+  height: 232px;
+  margin: 10px auto;
+  padding: 1px 0;
+  background: #e7e7e7;
+  border: 3px solid #222222;
+  border-radius: 5px;
+  user-select: none;
+}
+
+.keyboard .row {
+  clear: both;
+}
+
+.keyboard .key {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin: 3px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.key.Tab{
+  width: 50px;
+}
+
+.key.Del{
+  width: 44px;
+}
+
+.key.Enter,
+.key.ShiftRight{
+  width: 86px;
+}
+
+.key.Space{
+  width: 330px;
+}
+
+.keyboard .key.active{
+  color: #fff;
+  background-color: #333;
+}
+
+
+.keyboard .AltLeft, .keyboard .AltRight, .keyboard .ArrowUp, .keyboard .ArrowLeft, .keyboard .ArrowDown, .keyboard .ArrowRight, .keyboard .Win, .keyboard .Backspace, .keyboard .CapsLock, .keyboard .ControlLeft, .keyboard .ControlRight, .keyboard .Del, .keyboard .Enter, .keyboard .ShiftLeft, .keyboard .ShiftRight, .keyboard .Tab, .keyboard .MetaLeft {
+  font-weight: 600;
+}
+
+.keyboard .Backspace, .keyboard .CapsLock, .keyboard .ShiftLeft {
+  width: 100px;
+}
