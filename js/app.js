@@ -64,11 +64,6 @@ class Keyboard {
 
     keyCodes = [...keys];
 
-    specialKeyCodes = [
-        {'Enter': `\r\n`},
-        {'Tab': '    '},
-    ];
-
     isShiftACtive = false;
     isCapsLockActive = false;
 
@@ -80,10 +75,7 @@ class Keyboard {
         this.lisenKeybord();
         this.lisenScreen();
         this.saveSetingds();
-    }
-
-    clearKeyboard() {
-      document.getElementById('keyboard').innerHTML = '';
+        this.functionalKeys();
     }
 
     saveSetingds() {
@@ -101,10 +93,8 @@ class Keyboard {
 
                 localStorage.setItem("lang", this.lang);
 
-                this.clearKeyboard();
                 this.createVirtualKeyboard();
                 this.lisenScreen();
-                this.functionalKeys();
               }
             }
           }
@@ -127,196 +117,42 @@ class Keyboard {
       }
     }
 
-    findSpecialSymbol(eventKey) {
-      let res;
-        this.specialKeyCodes.forEach((obj) => {
-          const keySymbolArr = Object.entries(obj);
-          if (eventKey === keySymbolArr[0][0]) {
-              res = keySymbolArr[0][1];
-              return;
-          }
-      })
-
-      return res;
+    isUppercase() {
+      if (this.isCapsLockActive && this.isShiftACtive) {
+        return false;
+      }
+      return this.isCapsLockActive || this.isShiftACtive;
     }
 
     lisenKeybord() {
-        document.getElementById('textarea').addEventListener('keypress', ev => ev.preventDefault());
+      document.getElementById('textarea').addEventListener('keypress', ev => ev.preventDefault());
 
-        window.addEventListener('keydown', (ev) => {
-          let el = document.querySelector(`div[data-keycode='${ev.keyCode}']`);
-          if (ev.keyCode !== 20 && ev.keyCode !== 16 && ev.keyCode !== 17 && ev.keyCode !== 18) {
-            el.classList.add('active');
-            setTimeout(function(){
-              el.classList.remove('active');
-            }, 300)
-          }
-          let ind;
-          keys.forEach((el, index) => {
-            if (Object.values(el).includes(+ev.keyCode)) {
-              ind = index;
-            }
-          });
-
-          const textSymbol = this.findSpecialSymbol(ev.key);
-
-          switch (this.lang) {
-            case this.langOptions.en:
-              if ((this.isShiftACtive === true && this.isCapsLockActive === false) || (this.isShiftACtive === false && this.isCapsLockActive === true)) {
-                textarea.value += (textSymbol) ? textSymbol : (keys[ind]['en']).toUpperCase();
-              } else{
-                textarea.value += (textSymbol) ? textSymbol : keys[ind]['en'].toLowerCase();
-              }
-
-              break;
-
-            case this.langOptions.ru:
-              if ((this.isShiftACtive === true && this.isCapsLockActive === false) || (this.isShiftACtive === false && this.isCapsLockActive === true)) {
-                textarea.value += (textSymbol) ? textSymbol : (keys[ind]['ru']).toUpperCase();
-              } else{
-                textarea.value += (textSymbol) ? textSymbol : keys[ind]['ru'].toLowerCase();
-              }
-              break;
-
-            default:
-              break;
-          }
-
-          
-        });
-    }
-
-
-    lisenScreen() {
-        document.querySelectorAll('.key').forEach((el) => {
-            el.addEventListener('click', (ev) => {
-              if ((ev.target.dataset.keycode !== '20') && (ev.target.dataset.keycode !== '16') && (ev.target.dataset.keycode !== '17') && (ev.target.dataset.keycode !== '18')) {
-                let el = document.querySelector(`div[data-keycode='${ev.target.dataset.keycode}']`);
-                el.classList.add('active');
-                let ind;
-                keys.forEach((el, index) => {
-                  if (Object.values(el).includes(+ev.target.dataset.keycode)) {
-                    ind = index;
-                  }
-                });
-                textarea.value += keys[ind][this.lang];
-    
-                setTimeout(function(){
-                  el.classList.remove('active');
-                }, 200)
-              }
-            });
-        })
-    }
-
-
-    createVirtualKeyboard() {
-        let out = '';
-        switch (this.lang) {
-            case this.langOptions.en:
-              this.keyCodes.forEach(el => {
-                out += `<div class="key" data-keyCode="${el.keyCode}">${el.en}</div>`;
-
-               
-                // keyElement.addEventListener("click", () => {
-                //     this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
-                //     this._triggerEvent("oninput");
-                // });
-              })
-                
-              break;
-
-            case this.langOptions.ru:
-            
-                this.keyCodes.forEach(el => {
-                    out += `<div class="key" data-keyCode="${el.keyCode}">${el.ru}</div>`;
-
-            
-                    // keyElement.addEventListener("click", () => {
-                    //     this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
-                    //     this._triggerEvent("oninput");
-                    // });
-                })
-                
-                break;
-        
-            default:
-                break;
-
+      window.addEventListener('keydown', (ev) => {
+        let el = document.querySelector(`div[data-keycode='${ev.keyCode}']`);
+        if (ev.keyCode !== 20 && ev.keyCode !== 16 && ev.keyCode !== 17 && ev.keyCode !== 18) {
+          el.classList.add('active');
+          setTimeout(function(){
+            el.classList.remove('active');
+          }, 300)
         }
-        document.querySelector('.keyboard').innerHTML = out;
+        let ind;
+        keys.forEach((el, index) => {
+          if (Object.values(el).includes(+ev.keyCode)) {
+            ind = index;
+          }
+        });
 
-        const backspace = document.querySelector("div[data-keycode='8']");
-        backspace.classList.add('Backspace');
-        backspace.innerText = 'Backspace';
-
-        const tab = document.querySelector("div[data-keycode='9']");
-        tab.classList.add('Tab');
-        tab.innerText = 'Tab';
-
-        const enter = document.querySelector("div[data-keycode='13']");
-        enter.classList.add('Enter');
-        enter.innerText = 'Enter';
-
-        const shiftLeft = document.querySelectorAll("div[data-keycode='16']")[0];
-        shiftLeft.classList.add('ShiftLeft');
-        shiftLeft.innerText = 'Shift';
-
-        const shiftRight = document.querySelectorAll("div[data-keycode='16']")[1];
-        shiftRight.classList.add('ShiftRight');
-        shiftRight.innerText = 'Shift';
-
-        const ctrlLeft = document.querySelectorAll("div[data-keycode='17']")[0];
-        ctrlLeft.classList.add('ControlLeft');
-        ctrlLeft.innerText = 'Ctrl';
-
-        const ctrlRight = document.querySelectorAll("div[data-keycode='17']")[1];
-        ctrlRight.classList.add('ControlRight');
-        ctrlRight.innerText = 'Ctrl';
-
-        const altLeft = document.querySelectorAll("div[data-keycode='18']")[0];
-        altLeft.classList.add('AltLeft');
-        altLeft.innerText = 'Alt';
-
-        const altRight = document.querySelectorAll("div[data-keycode='18']")[1];
-        altRight.classList.add('AltRight');
-        altRight.innerText = 'Alt';
-
-        const win = document.querySelector("div[data-keycode='91']");
-        win.classList.add('Win');
-        win.innerText = 'Win';
-
-        const capsLock = document.querySelector("div[data-keycode='20']");
-        capsLock.classList.add('CapsLock');
-        capsLock.innerText = 'CapsLock';
-
-        const arrowUp = document.querySelector("div[data-keycode='38']");
-        arrowUp.innerText = '\u2191';
-
-        const arrowLeft = document.querySelector("div[data-keycode='37']");
-        arrowLeft.innerText = '\u2190';
-
-        const arrowDown = document.querySelector("div[data-keycode='40']");
-        arrowDown.innerText = '\u2193';
-
-        const arrowRight = document.querySelector("div[data-keycode='39']");
-        arrowRight.innerText = '\u2192';
-
-        const space = document.querySelector("div[data-keycode='32']");
-        space.classList.add('Space');
-
-        const del = document.querySelector("div[data-keycode='46']");
-        del.classList.add('Del');
-        del.innerText = 'del';
+        textarea.value += (this.isUppercase()) ? keys[ind][this.lang].toUpperCase() :keys[ind][this.lang];
+      });
     }
 
   functionalKeys () {
-    let capsLockKey = document.querySelector('.CapsLock');
-    capsLockKey.addEventListener('click', (ev) => {
-      capsLockKey.classList.toggle('active');
-    });
-
     document.addEventListener('click', (ev) => {
+      if (ev.target.classList.contains('CapsLock')) {
+        this.isCapsLockActive = !this.isCapsLockActive;
+        ev.target.classList.toggle('active');
+      }
+
       if (ev.target.classList.contains('ControlLeft')) {
         ev.target.classList.add('active');
         setTimeout(function(){
@@ -346,10 +182,34 @@ class Keyboard {
       }
     });
 
+    document.addEventListener('mousedown', (ev) => {
+      if (ev.target.classList.contains('ShiftLeft')) {
+        ev.target.classList.add('active');
+        this.isShiftACtive = true;
+      }
+
+      if (ev.target.classList.contains('ShiftRight')) {
+        ev.target.classList.add('active');
+        this.isShiftACtive = true;
+      }
+    });
+
+    document.addEventListener('mouseup', (ev) => {
+      if (ev.target.classList.contains('ShiftLeft')) {
+        ev.target.classList.remove('active');
+        this.isShiftACtive = false;
+      }
+
+      if (ev.target.classList.contains('ShiftRight')) {
+        ev.target.classList.remove('active');
+        this.isShiftACtive = false;
+      }
+    });
+
     window.addEventListener('keydown', (ev) => {
       if (ev.keyCode === 20) {
-        ev.preventDefault();
-        capsLockKey.classList.toggle('active');
+        this.isCapsLockActive = !this.isCapsLockActive;
+        document.querySelector(`.${ev.code}`).classList.toggle('active');
       }
 
       if (ev.keyCode === 17) {
@@ -365,39 +225,122 @@ class Keyboard {
           document.querySelector(`.${ev.code}`).classList.remove('active');
         }, 300)
       }
-    })
+
+      if (ev.keyCode === 16) {
+        this.isShiftACtive = true;
+        document.querySelector(`.${ev.code}`).classList.add('active');
+      }
+    });
+
+    window.addEventListener('keyup', (ev) => {
+      if (ev.keyCode === 16) {
+        this.isShiftACtive = false;
+        document.querySelector(`.${ev.code}`).classList.remove('active');
+      }
+    });
   }
 
+
+  lisenScreen() {
+      document.querySelectorAll('.key').forEach((el) => {
+          el.addEventListener('click', (ev) => {
+            if ((ev.target.dataset.keycode !== '20') && (ev.target.dataset.keycode !== '16') && (ev.target.dataset.keycode !== '17') && (ev.target.dataset.keycode !== '18')) {
+              let el = document.querySelector(`div[data-keycode='${ev.target.dataset.keycode}']`);
+              el.classList.add('active');
+              let ind;
+              keys.forEach((el, index) => {
+                if (Object.values(el).includes(+ev.target.dataset.keycode)) {
+                  ind = index;
+                }
+              });
+              textarea.value += this.isUppercase() ? keys[ind][this.lang].toUpperCase() : keys[ind][this.lang];
+  
+              setTimeout(function(){
+                el.classList.remove('active');
+              }, 200)
+            }
+          });
+      })
+  }
+
+
+  createVirtualKeyboard() {
+    let out = '';
+
+    const isUppercase = this.isUppercase()
+
+    this.keyCodes.forEach(el => {
+      out += `<div class="key" data-keyCode="${el.keyCode}">${isUppercase ? (el.en).toUpperCase() : el[this.lang]}</div>`;
+    })
+
+    document.querySelector('.keyboard').innerHTML = out;
+
+    const backspace = document.querySelector("div[data-keycode='8']");
+    backspace.classList.add('Backspace');
+    backspace.innerText = 'Backspace';
+
+    const tab = document.querySelector("div[data-keycode='9']");
+    tab.classList.add('Tab');
+    tab.innerText = 'Tab';
+
+    const enter = document.querySelector("div[data-keycode='13']");
+    enter.classList.add('Enter');
+    enter.innerText = 'Enter';
+
+    const shiftLeft = document.querySelectorAll("div[data-keycode='16']")[0];
+    shiftLeft.classList.add('ShiftLeft');
+    shiftLeft.innerText = 'Shift';
+
+    const shiftRight = document.querySelectorAll("div[data-keycode='16']")[1];
+    shiftRight.classList.add('ShiftRight');
+    shiftRight.innerText = 'Shift';
+
+    const ctrlLeft = document.querySelectorAll("div[data-keycode='17']")[0];
+    ctrlLeft.classList.add('ControlLeft');
+    ctrlLeft.innerText = 'Ctrl';
+
+    const ctrlRight = document.querySelectorAll("div[data-keycode='17']")[1];
+    ctrlRight.classList.add('ControlRight');
+    ctrlRight.innerText = 'Ctrl';
+
+    const altLeft = document.querySelectorAll("div[data-keycode='18']")[0];
+    altLeft.classList.add('AltLeft');
+    altLeft.innerText = 'Alt';
+
+    const altRight = document.querySelectorAll("div[data-keycode='18']")[1];
+    altRight.classList.add('AltRight');
+    altRight.innerText = 'Alt';
+
+    const win = document.querySelector("div[data-keycode='91']");
+    win.classList.add('Win');
+    win.innerText = 'Win';
+
+    const capsLock = document.querySelector("div[data-keycode='20']");
+    capsLock.classList.add('CapsLock');
+    capsLock.innerText = 'CapsLock';
+
+    const arrowUp = document.querySelector("div[data-keycode='38']");
+    arrowUp.innerText = '\u2191';
+
+    const arrowLeft = document.querySelector("div[data-keycode='37']");
+    arrowLeft.innerText = '\u2190';
+
+    const arrowDown = document.querySelector("div[data-keycode='40']");
+    arrowDown.innerText = '\u2193';
+
+    const arrowRight = document.querySelector("div[data-keycode='39']");
+    arrowRight.innerText = '\u2192';
+
+    const space = document.querySelector("div[data-keycode='32']");
+    space.classList.add('Space');
+
+    const del = document.querySelector("div[data-keycode='46']");
+    del.classList.add('Del');
+    del.innerText = 'del';
+  }
 }
 
 
 window.addEventListener("DOMContentLoaded", function () {
   const keybord = new Keyboard();
 });
-
-// document.onkeydown = function(ev) {
-//   if(ev.keyCode === 17) {
-//     document.onkeyup = function(ev) {
-//       if (ev.keyCode === 16) {
-//         document.querySelector('.keyboard').innerHTML = '';
-//         Keyboard.createVirtualKeyboard();
-//       }
-//     }
-//   }
-// }
-
-// function changeCaseText() {
-//   let capsLock = document.querySelector(".CapsLock");
-//   capsLock.addEventListener('click', () => {
-//     this.isCapsLockActive = !this.isCapsLockActive;
-//     capsLock.classList.toggle('active');
-//   })
-
-//   window.addEventListener('keydown', (ev) => {
-//     if (ev.keyCode === 20) {
-//       ev.preventDefault();
-//       this.isCapsLockActive = !this.isCapsLockActive;
-//       capsLock.classList.toggle('active');
-//     }
-//   })
-// }
