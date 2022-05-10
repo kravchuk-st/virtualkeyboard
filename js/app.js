@@ -74,25 +74,20 @@ class Keyboard {
 
     saveSetingds() {
       if(window.localStorage) {
-        document.onkeydown = (ev) => {
-          if(ev.keyCode === 16) {
-            document.onkeyup = (event) => {
-              if (event.keyCode === 17) {
-
-                if (localStorage.getItem("lang") === 'en') {
-                  this.lang = this.langOptions.ru;
-                } else {
-                  this.lang = this.langOptions.en;
-                }
-
-                localStorage.setItem("lang", this.lang);
-
-                this.createVirtualKeyboard();
-                this.lisenScreen();
-              }
+        document.addEventListener('keydown', (ev) => {
+          console.log(ev);
+          if (ev.ctrlKey && ev.shiftKey) {
+            if (localStorage.getItem("lang") === 'en') {
+              this.lang = this.langOptions.ru;
+            } else {
+              this.lang = this.langOptions.en;
             }
+            localStorage.setItem("lang", this.lang);
+
+            this.createVirtualKeyboard();
+            this.lisenScreen();
           }
-        }
+        });
       }
     }
 
