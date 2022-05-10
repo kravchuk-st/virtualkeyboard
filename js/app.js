@@ -47,18 +47,12 @@ language.classList.add('language');
 language.innerText = 'Для переключения языка используйте комбинацию клавиш: левыe Ctrl + Shift';
 container.append(language);
 
-
-
-
 class Keyboard {
     
     langOptions = {
         'en': 'en',
         'ru': 'ru',
     }
-
-    // lang = this.langOptions.en;
-
     
     value = "";
 
