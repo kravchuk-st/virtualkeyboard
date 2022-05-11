@@ -23,6 +23,7 @@ textarea.id = "textarea";
 textarea.setAttribute("cols", "70");
 textarea.setAttribute("rows", "10");
 container.append(textarea);
+textarea.focus();
 
 let keyboard = document.createElement("div");
 keyboard.classList.add("keyboard");
@@ -107,9 +108,9 @@ class Keyboard {
     lisenKeybord() {
       document.getElementById("textarea").addEventListener("keypress", ev => ev.preventDefault());
 
-      window.addEventListener("keydown", (ev) => {
+      document.addEventListener("keydown", (ev) => {
         let el = document.querySelector(`div[data-keycode="${ev.keyCode}"]`);
-        if (ev.keyCode !== 20 && !ev.shiftKey && !ev.ctrlKey && !ev.altKey) {
+        if (ev.keyCode !== 20 && ev.keyCode !== 16 && ev.keyCode !== 17 && ev.keyCode !== 18) {
           el.classList.add("active");
           setTimeout(function(){
             el.classList.remove("active");
@@ -122,7 +123,7 @@ class Keyboard {
           }
         });
 
-        textarea.value += (this.isUppercase()) ? keys[ind][this.lang].toUpperCase() :keys[ind][this.lang];
+        textarea.setRangeText((this.isUppercase()) ? keys[ind][this.lang].toUpperCase() :keys[ind][this.lang], textarea.selectionStart, textarea.selectionEnd, "end");
       });
     }
 
@@ -162,11 +163,11 @@ class Keyboard {
       }
 
       if (ev.target.classList.contains("Backspace")) {
-        document.querySelector("#textarea").value = document.querySelector("#textarea").value.slice(0, -1);
+        textarea.setRangeText("", textarea.selectionStart-1, textarea.selectionEnd, "end");
       }
       
       if (ev.target.classList.contains("Del")) {
-        document.querySelector("#textarea").value = "";
+        textarea.setRangeText("", textarea.selectionStart, textarea.selectionEnd + 1, "end");
       }
     });
 
@@ -220,11 +221,11 @@ class Keyboard {
       }
 
       if (ev.keyCode === 8) {
-        document.querySelector("#textarea").value = document.querySelector("#textarea").value.slice(0, -1);
+        textarea.setRangeText("", textarea.selectionStart - 1, textarea.selectionEnd, "end");
       }
 
       if (ev.keyCode === 46) {
-        document.querySelector("#textarea").value = "";
+        textarea.setRangeText("", textarea.selectionStart, textarea.selectionEnd + 1, "end");
       }
     });
 
@@ -248,7 +249,7 @@ class Keyboard {
                   ind = index;
                 }
               });
-              textarea.value += this.isUppercase() ? keys[ind][this.lang].toUpperCase() : keys[ind][this.lang];
+              textarea.setRangeText((this.isUppercase()) ? keys[ind][this.lang].toUpperCase() :keys[ind][this.lang], textarea.selectionStart, textarea.selectionEnd, "end");
   
               setTimeout(function(){
                 el.classList.remove("active");
