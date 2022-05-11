@@ -1,9 +1,9 @@
-module.exports = {
+{
   "env": {
     "browser": true,
     "es6": true
   },
-  "ecstends": "eslint:recommended",
+  "extends": "eslint:recommended",
   "globals": {
     "Atomics": "readonly",
     "SheredArreyBuffer": "readonly"
@@ -19,4 +19,4 @@ module.exports = {
     "semi": ["error", "always"],
     "quotes": ["error", "double"]
   }
-};
+}
