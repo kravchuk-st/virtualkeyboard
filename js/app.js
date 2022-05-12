@@ -250,7 +250,7 @@ class Keyboard {
                 }
               });
               textarea.setRangeText((this.isUppercase()) ? keys[ind][this.lang].toUpperCase() :keys[ind][this.lang], textarea.selectionStart, textarea.selectionEnd, "end");
-  
+              textarea.focus();
               setTimeout(function(){
                 el.classList.remove("active");
               }, 200);
